@@ -63,7 +63,7 @@ public class AccountServiceImplTest {
 		int account = accountServiceImpl.updateAccount(90000, "12345678");
 
 		// then
-		verify(accountRepository).findByAccountNo("12345678");
+		verify(accountRepository).updateAccount(90000, "12345678");
 		assertEquals(1, account);
 	}
 
