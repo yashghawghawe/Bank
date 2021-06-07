@@ -1,6 +1,7 @@
 package com.yash.demo.bank.entity;
 
 import java.util.Date;
+import java.util.function.Consumer;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,5 +33,8 @@ public class Transaction {
 	private String type;
 	private String description;
 
-}
+	public Transaction(Consumer<Transaction> builder) {
+		builder.accept(this);
+	}
 
+}

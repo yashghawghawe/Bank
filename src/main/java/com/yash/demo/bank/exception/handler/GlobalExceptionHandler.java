@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
 	 * @return
 	 */
 	@ExceptionHandler(InsufficientBalanceException.class)
-	public ResponseEntity<?> handleInsufficientBalanceException(InsufficientBalanceException e) {
+	public ResponseEntity<String> handleInsufficientBalanceException(InsufficientBalanceException e) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body("Balance is low for tranasction " + InsufficientBalanceException.class);
 	}
@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
 	 * @return
 	 */
 	@ExceptionHandler(TransactionFailedException.class)
-	public ResponseEntity<?> handleTransactionFailedException(TransactionFailedException e) {
+	public ResponseEntity<String> handleTransactionFailedException(TransactionFailedException e) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND)
 				.body("Transaction Failed " + TransactionFailedException.class);
 	}
@@ -46,7 +46,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
 		Map<String, String> errors = new HashMap<>();
-		ex.getBindingResult().getAllErrors().forEach((error) -> {
+		ex.getBindingResult().getAllErrors().forEach(error -> {
 			String fieldName = ((FieldError) error).getField();
 			String errorMessage = error.getDefaultMessage();
 			errors.put(fieldName, errorMessage);

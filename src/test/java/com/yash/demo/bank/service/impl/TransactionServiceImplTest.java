@@ -12,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.yash.demo.bank.dto.AccountDTO;
@@ -46,39 +47,43 @@ public class TransactionServiceImplTest {
 
 	@BeforeAll
 	public static void setUp() {
-		accountDTO = new AccountDTO();
-		accountDTO.setAccountNo("12345678");
-		accountDTO.setUserId(1);
-		accountDTO.setBalance(100000);
+		accountDTO = new AccountDTO(account -> {
+			account.setAccountNo("12345678");
+			account.setUserId(1);
+			account.setBalance(100000);
+		});
 
-		accountDTOBen = new AccountDTO();
-		accountDTOBen.setAccountNo("11223344");
-		accountDTOBen.setUserId(2);
-		accountDTOBen.setBalance(100000);
+		accountDTOBen = new AccountDTO(account -> {
+			account.setAccountNo("11223344");
+			account.setUserId(2);
+			account.setBalance(100000);
+		});
 
 		transactionDTO = new TransactionDTO("12345678", "11223344", 10000);
 
-		debitTransaction = new Transaction();
-		debitTransaction.setAccountNo("12345678");
-		debitTransaction.setAccountnoben("11223344");
-		debitTransaction.setAmount(10000);
-		Date date = new Date();
-		java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-		debitTransaction.setDate(sqlDate);
-		debitTransaction.setDescription("fastkartTransfer");
-		debitTransaction.setType("DEBIT");
-		debitTransaction.setUserid(1);
+		debitTransaction = new Transaction(transaction -> {
+			transaction.setAccountNo("12345678");
+			transaction.setAccountnoben("11223344");
+			transaction.setAmount(10000);
+			Date date = new Date();
+			java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+			transaction.setDate(sqlDate);
+			transaction.setDescription("fastkartTransfer");
+			transaction.setType("DEBIT");
+			transaction.setUserid(1);
+		});
 
-		creditTransaction = new Transaction();
-		creditTransaction.setAccountNo("11223344");
-		creditTransaction.setAccountnoben("12345678");
-		creditTransaction.setAmount(10000);
-		Date date2 = new Date();
-		java.sql.Date sqlDate2 = new java.sql.Date(date2.getTime());
-		creditTransaction.setDate(sqlDate2);
-		creditTransaction.setDescription("fastkartTransfer");
-		creditTransaction.setType("CREDIT");
-		creditTransaction.setUserid(2);
+		creditTransaction = new Transaction(transaction -> {
+			transaction.setAccountNo("11223344");
+			transaction.setAccountnoben("12345678");
+			transaction.setAmount(10000);
+			Date date2 = new Date();
+			java.sql.Date sqlDate2 = new java.sql.Date(date2.getTime());
+			transaction.setDate(sqlDate2);
+			transaction.setDescription("fastkartTransfer");
+			transaction.setType("CREDIT");
+			transaction.setUserid(2);
+		});
 	}
 
 	/**
@@ -93,8 +98,8 @@ public class TransactionServiceImplTest {
 		when(accountService.findByAccountNo("11223344")).thenReturn(accountDTOBen);
 		when(accountService.updateAccount(10000, "12345678")).thenReturn(1);
 		when(accountService.updateAccount(10000, "11223344")).thenReturn(1);
-		when(transactionRepository.save(debitTransaction)).thenReturn(debitTransaction);
-		when(transactionRepository.save(creditTransaction)).thenReturn(creditTransaction);
+		when(transactionRepository.save(Mockito.any(Transaction.class))).thenReturn(debitTransaction);
+		when(transactionRepository.save(Mockito.any(Transaction.class))).thenReturn(creditTransaction);
 
 		// when
 		String response = transactionServiceImpl.transferFund(transactionDTO);
