@@ -15,7 +15,7 @@ import com.yash.demo.bank.service.AccountService;
 @Service
 @Transactional
 public class AccountServiceImpl implements AccountService {
-	
+
 	@Autowired
 	private AccountRepository accountRepository;
 
@@ -25,14 +25,12 @@ public class AccountServiceImpl implements AccountService {
 		if (ObjectUtils.isEmpty(account)) {
 			return null;
 		}
-		AccountDTO accountDTO = new AccountDTO();
-		BeanUtils.copyProperties(account, accountDTO);
-		return accountDTO;
+		return new AccountDTO(accountdto -> BeanUtils.copyProperties(account, accountdto));
 	}
 
 	@Override
 	public int updateAccount(double newBalance, String accountNo) {
-		return accountRepository.updateAccount(newBalance,accountNo);
+		return accountRepository.updateAccount(newBalance, accountNo);
 	}
 
 }

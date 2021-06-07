@@ -1,18 +1,19 @@
 package com.yash.demo.bank.exception;
 
-public class TransactionFailedException extends Exception{
-	
+/**
+ * @author yash.ghawghawe
+ *
+ */
+public class TransactionFailedException extends Exception {
+
 	private static final long serialVersionUID = 1L;
-	String str;
-
-	public TransactionFailedException() {
-
-	}
+	private final String str;
 
 	public TransactionFailedException(String str) {
 		this.str = str;
 	}
 
+	@Override
 	public String toString() {
 		return str;
 	}

@@ -1,6 +1,7 @@
 package com.yash.demo.bank.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -51,6 +52,17 @@ public class AccountServiceImplTest {
 		// then
 		verify(accountRepository).findByAccountNo("12345678");
 		assertEquals(account, account);
+	}
+
+	@Test
+	@DisplayName("Negative Scenario : Find Account")
+	public void findByAccountNoFailedTest() throws TransactionFailedException {
+		// given
+		when(accountRepository.findByAccountNo("12345678")).thenReturn(null);
+	
+		AccountDTO accountDTO=accountServiceImpl.findByAccountNo("12345678");
+		// then
+		assertNull(accountDTO);
 	}
 
 	@Test
